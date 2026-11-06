@@ -1,7 +1,11 @@
 
 .login_pfp{
-    width: 25%;
-    height: 25%;
+    width: 100%;
+    height: 100%;
+}
+
+.login{
+    color: blue;
 }
 
 .login_profile{
@@ -14,7 +18,7 @@
 }
 
 .home_page_home{
-    color: gold;
+    color: blue;
 }
 
 .home_page_profile{
@@ -25,9 +29,9 @@
     text-align: right;
 }
 
-.login_homepage{
-    right: 20%;
-}
+/* .login_homepage{
+    text-align: right;
+} */
 
 .register_register{
     text-align: center;
@@ -41,13 +45,12 @@
 }
 
 .logout{
-    color: red;
+    color: blue;
 }
 
-.logout_homepage{
-    text-align: left;
-    margin-left: -40px;
-}
+/* .logout_homepage{
+    text-align: right;
+} */
 
 a{
     text-decoration: none;
@@ -60,5 +63,26 @@ a{
 }
 
 .login_link{
+    text-align: left;
+}
+
+.hello_positioning{
+    text-align: left;
+}
+
+.index_users_posts{
+    text-align: right;
+}
+
+.users_posts{
+    text-align: right;
+}
+
+/* .index_linkname{
+    text-align: left;
+} */
+
+.u_pag{
+    color: blueviolet;
     text-align: left;
 }

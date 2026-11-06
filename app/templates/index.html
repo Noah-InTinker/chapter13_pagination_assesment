@@ -2,8 +2,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <hr>
-    <h1 class="all_messages">All Messages</h1>
     <div class="row">
         <div class="col-md-12">
             <!-- <table class="table table-bordered"> 
@@ -28,6 +26,9 @@
             </table> -->
         {% if current_user.is_authenticated %}
         {% else %}
+            <div class="col-md-5">
+                <h1><a class="home_page_home" href="{{ url_for('index') }}">Students'Spaces</a></h1>
+            </div>
             <p class="login_link">
             <a href="{{'login'}}">Log in to post.</a>
             </p>
@@ -35,22 +36,76 @@
         </div>
     </div>
 
+    <p class="hello_positioning">
+        Hi {{ current_user.username }}. say somthing:
+    </p>
+    <!-- Start: Post Form -->
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-1">
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.body.label }}<br>
+                    {{ form.body(cols=100, rows=4) }}<br>
+                    {% for error in form.body.errors %}
+                        <span style="color: red;">
+                            {{ error }}
+                        </span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.submit() }}
+                </p>
+            </form>
+        </div>
+  </div>
+<!-- End of post form -->
+
+<!--User Post-->
+<div class="row">
+    <div class="col-md-3">
+        <h1>All User Posts</h1>
+    </div>
+    <div class="col-md-9">
+        <h1 class="users_posts">All My Posts</h1>
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-10 text-start">
             {% for post in posts %}
+                {% if post %}
+                    <table>
+                        <tr valign="top">
+                            <td><img src="{{ post.author.avatar(36) }}"></td>
+                            <td>{{ post.author.username }} says:<br>{{ post.body }}</td>
+                        </tr>
+                    </table>
+                {% endif %}
+            {% endfor %}
+            <!-- Pagination -->>
+            {% if prev_url %}
+                <a class="u_pag" href=" {{ prev_url }} ">Newer posts</a>
+            {% endif %}
+            {% if next_url %}
+                <a class="u_pag" href=" {{ next_url }} ">Older posts</a>
+            {% endif %}
+        </div>
+<!--End of User post-->
+        <div class="col-md-2">
+            {% for post in user_posts %}
+                <!-- Specific user posts -->
                 {% if post %}
                     {% include '_post.html' %}
                 {% endif %}
             {% endfor %}
-
+                <!-- End of user post -->
             <!-- Pagination -->>
             {% if prev_url %}
-                <a href=" {{ prev_url }} ">Newer posts</a>
+                <a href=" {{ user_prev_url }} ">Newer posts</a>
             {% endif %}
             {% if next_url %}
-                <a href=" {{ next_url }} ">Older posts</a>
+                <a href=" {{ user_next_url }} ">Older posts</a>
             {% endif %}
-
         </div>
     </div>
 {% endblock %}

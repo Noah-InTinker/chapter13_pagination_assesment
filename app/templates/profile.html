@@ -32,30 +32,7 @@
     </div>
   </div>
   <hr>
-<!-- Start: Post Form -->
-  <div class="row">
-        <div class="col-md-12">
-            <p>
-                Hi {{ current_user.username }}. say somthing:
-            </p>
-            <form action="" method="post" novalidate>
-                {{ form.hidden_tag() }}
-                <p>
-                    {{ form.body.label }}<br>
-                    {{ form.body(cols=100, rows=4) }}<br>
-                    {% for error in form.body.errors %}
-                        <span style="color: red;">
-                            {{ error }}
-                        </span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ form.submit() }}
-                </p>
-            </form>
-        </div>
-  </div>
-<!-- End of post form -->
+?
   <div class="row">
         <div class="col-md-12">
             {% for post in posts %}

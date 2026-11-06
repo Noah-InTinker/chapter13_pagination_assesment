@@ -16,10 +16,20 @@ def before_request():
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
+@login_required
 def index():
     "Index URL"
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body= form.body.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post is live!')
+        return redirect(url_for('index'))
     posts = Post.query.all()
-
+    user_posts = Post.query.filter_by(user_id= current_user.id).order_by(Post.timestamp.desc()).paginate(
+        per_page=app.config['POSTS_PER_PAGE'],
+        error_out=False)
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
         page=page,
@@ -29,13 +39,21 @@ def index():
         if posts.has_next else None
     prev_url = url_for('index', page=posts.prev_num) \
         if posts.has_prev else None
-
+    user_next_url = url_for('index', page=user_posts.next_num) \
+        if user_posts.has_next else None
+    user_prev_url = url_for('index', page=user_posts.prev_num) \
+            if user_posts.has_prev else None
     return render_template(
         'index.html',
         title='Home',
         posts=posts.items,
+        page=page,
         next_url=next_url,
-        prev_url=prev_url)
+        prev_url=prev_url,
+        user_next_url=user_next_url,
+        user_prev_url=user_prev_url,
+        form=form,
+        user_posts=user_posts.items)
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
@@ -93,7 +111,7 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
-            return redirect('index')
+            return redirect('login')
         login_user(user, remember=form.remember_me.data)
         flash(f'Welcome {form.username.data}')
         return redirect('index')
